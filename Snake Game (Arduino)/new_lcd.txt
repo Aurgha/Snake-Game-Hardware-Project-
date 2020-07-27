@@ -1,0 +1,69 @@
+UTFT_Demo_320x240  Copyright (C)2015 Rinky-Dink Electronics, Henning Karlsen. All right reserved  web httpwww.RinkyDinkElectronics.com   This program is a demo of how to use most of the functions  of the library with a supported display modules.   This demo was made for modules with a screen resolution  of 320x240 pixels.   This program requires the UTFT library. 
+#include UTFT.h
+ Declare which fonts we will be using 
+extern uint8_t SmallFont[];
+ Set the pins to the correct ones for your development shield  ----------------------------------------------------------- Arduino Uno  2009  ------------------ Standard Arduino Uno2009 shield             display model,A5,A4,A3,A2  DisplayModule Arduino Uno TFT shield         display model,A5,A4,A3,A2   Arduino Mega  ------------------ Standard Arduino MegaDue shield             display model,38,39,40,41  CTE TFT LCDSD Shield for Arduino Mega       display model,38,39,40,41   Remember to change the model parameter to suit your display module! 
+UTFT myGLCD(ILI9325D_16,38,39,40,41);
+void setup() {  
+  randomSeed(analogRead(0));   Setup the LCD  
+  myGLCD.InitLCD();  
+  myGLCD.setFont(SmallFont); 
+  }
+void loop() {  
+  int buf[318];  
+  int x, x2;  
+  int y, y2;  
+  int r;
+ Clear the screen and draw the frame  myGLCD.clrScr();
+  myGLCD.setColor(255, 0, 0);  
+  myGLCD.fillRect(0, 0, 319, 13);  
+  myGLCD.setColor(64, 64, 64);  
+  myGLCD.fillRect(0, 226, 319, 239);  
+  myGLCD.setColor(255, 255, 255);  
+  myGLCD.setBackColor(255, 0, 0);  
+  myGLCD.print( Universal Color TFT Display Library , CENTER, 1);  
+  myGLCD.setBackColor(64, 64, 64);  
+  myGLCD.setColor(255,255,0);  
+  myGLCD.print(httpwww.RinkyDinkElectronics.com, CENTER, 227);
+  myGLCD.setColor(0, 0, 255);  
+  myGLCD.drawRect(0, 14, 319, 225);
+ Draw crosshairs  
+myGLCD.setColor(0, 0, 255);  
+myGLCD.setBackColor(0, 0, 0);  
+myGLCD.drawLine(159, 15, 159, 224);  
+myGLCD.drawLine(1, 119, 318, 119);  
+for (int i=9; i310; i+=10)   
+myGLCD.drawLine(i, 117, i, 121);  
+for (int i=19; i220; i+=10)    
+myGLCD.drawLine(157, i, 161, i);
+ Draw sin-, cos- and tan-lines    
+myGLCD.setColor(0,255,255);  
+myGLCD.print(Sin, 5, 15);  
+for (int i=1; i318; i++)  
+{    
+  myGLCD.drawPixel(i,119+(sin(((i1.13)3.14)180)95));  
+  }    
+  myGLCD.setColor(255,0,0);  
+  myGLCD.print(Cos, 5, 27);  
+  for (int i=1; i318; i++)  
+  {    
+    myGLCD.drawPixel(i,119+(cos(((i1.13)3.14)180)95));
+  }
+  myGLCD.setColor(255,255,0);  
+  myGLCD.print(Tan, 5, 39);  
+  for (int i=1; i318; i++)  
+  {    
+    myGLCD.drawPixel(i,119+(tan(((i1.13)3.14)180)));  
+    }
+  deactivate_and_wait();
+}
+ 
+
+void deactivate_and_wait(){
+   set Databus inactive to prevent latchup  
+  for (int i = 22; i=37; i++)
+       pinMode(i,INPUT_PULLUP);   
+       delay(2000);   
+       for (int i = 22; i=37; i++) 
+       pinMode(i,OUTPUT); 
+       }
